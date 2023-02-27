@@ -1,7 +1,7 @@
-import background from "../../image/background.png"
 import { useState } from "react"
 import axios from 'axios'
 import { useNavigate } from "react-router-dom"
+
 function Login() {
     const navigate = useNavigate()
     const [inputs, setInputs] = useState({
@@ -9,30 +9,34 @@ function Login() {
         client_secret:""
     })
     const [err, setErr] = useState({})
+
     function handleErrUsername () {
         if(err.client_id) 
             return <span className="err">{err.client_id}</span>
     }
+
     function handleErrPassword () {
         if(err.client_secret) 
             return <span className="err">{err.client_secret}</span>
     }
+
     const handleInputs = (e) => {
         const name = e.target.name
         const value = e.target.value
         setInputs(state => ({...state, [name]: value}))
     }
-    const handleSubmit = (e) => {
-        e.preventDefault()
+
+    function handleSubmit (event){
+        event.preventDefault()
         let frag = true;
         let errs = {}
-        if(inputs.username === "") {
+        if(inputs.client_id === "") {
             frag = false
-            errs.username = 'Enter your username'
+            errs.client_id = 'Enter your Client ID'
         }
-        if(inputs.password === "") {
+        if(inputs.client_secret === "") {
             frag = false
-            errs.password = 'Enter your password'
+            errs.client_secret = 'Enter your Client Secrect'
         }
         if(!frag) {
             setErr(errs)
@@ -49,12 +53,11 @@ function Login() {
                     localStorage.setItem('access_token', data.data.access_token)
                     navigate('/home')
                 })
-                .catch(err => {console.log(err)})
+                .catch(err => {alert("Wrong ClientID or Client Secrect")})
         }
     }
     return <>
         <div className="containerLogin">
-            <img src={background} alt="" />
             <div className="left-content">
                 <p>PANDAS</p>
                 <h1>Giant pandas: Living proof that conservation works</h1>

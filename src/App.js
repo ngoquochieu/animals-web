@@ -1,9 +1,11 @@
 import './App.css';
 
 function App(props) {
-  return <div>
-      {props.children}
-    </div>
+  return <>
+      <section>
+        {props.children}
+      </section>
+    </>
 }
 
 export default App;

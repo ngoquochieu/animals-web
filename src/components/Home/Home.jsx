@@ -1,12 +1,15 @@
 import axios from "axios"
+import Header from "../Layout/Header"
+import Footer from "../Layout/Footer"
+import Pagination from "../Pagination/Pagination"
 import { useEffect, useState } from "react"
-import dog from "../../image/DOG.PNG"
 import notImg from "../../image/Image_not_available.png"
 import {FaHeart} from 'react-icons/fa'
 import queryString from 'query-string'
-// import {GrNext, GrPrevious} from 'react-icons/gr'
-import Pagination from "./Pagination"
+import { useNavigate } from "react-router-dom"
+
 function Home () {
+    const navigate = useNavigate()
     const [animals, setAnimails] = useState([])
     const [pagination, setPagination] = useState({
         current_page: 1,
@@ -17,6 +20,12 @@ function Home () {
         page:1,
         limit: pagination.count_per_page
     })
+    window.addEventListener('load', () => {
+        localStorage.removeItem('access_token')
+        navigate('/')
+    })
+
+    /*Get data from API*/
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token')
         let config = {
@@ -27,8 +36,10 @@ function Home () {
             }
         }
         axiosAnimals(config)
+        
     }, [filter])
-
+    
+    // Function get data from API
     const axiosAnimals = async (config) => {
         try {
             const paramString = queryString.stringify(filter)
@@ -40,7 +51,7 @@ function Home () {
             console.log(error)
         }
     }      
-
+    
     function handlePhoto (animal) {
         if(animal.photos.length !== 0)
             return <img src={animal.photos[0].large} alt = ""/>
@@ -49,16 +60,12 @@ function Home () {
     }
     
     function handlePageChange(newPage) {
-        setFilter({
-            ...filter,
-            page: newPage
-        })
+        setFilter({...filter, page: newPage})
     }
 
     function render() {
         if(animals.length > 0) {
             return animals.map(animal => {
-                // if (animal.photos.length > 0)
                 return <>
                     <div className="animal">
                         <button className="btn-like"><FaHeart/></button>
@@ -79,18 +86,7 @@ function Home () {
     }
     return <>
         <div className="home">
-            <div className="header">
-                <div className="content-header">
-                    <div className="left-header">
-                        <img src={dog} alt="" />
-                        <p>75 Dogs</p>
-                    </div>
-                    <div className="right-header">
-                        <button>SAVE SEARCH</button>
-                    </div>
-                </div>
-               
-            </div>
+            <Header animals = {pagination.total_count}/>
             <div className="container">
                 <div className="content">
                     <div className="left-container">
@@ -115,7 +111,7 @@ function Home () {
                                     <li>Extra Large</li>
                                 </ul>
                             </li>
-                            <div className="type-animals">gender</div>
+                            <div className="type-animals">Gender</div>
                             <li>
                                 <div>Any</div>
                                 <ul className="sub-filter">
@@ -123,7 +119,7 @@ function Home () {
                                     <li>Female</li>
                                 </ul>
                             </li>
-                            <div className="type-animals">COAT LENGTH</div>
+                            <div className="type-animals">Coat Length</div>
                             <li>
                                 <div>Any</div>
                                 <ul className="sub-filter">
@@ -137,15 +133,16 @@ function Home () {
                             </li>
                         </ul>
                     </div>
-                    <div className="right-container">
+                    <div className="right-container">        
+                        {render()}
                         <Pagination
                             pagination = {pagination}
                             onPageChange = {handlePageChange}
-                        />                      
-                        {render()}
+                        />        
                     </div>
                 </div>
             </div>
+            <Footer/>
         </div>
     </>
 }
