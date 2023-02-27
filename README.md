@@ -3,7 +3,7 @@
 ## Use Account Below to Login
 
 
-### `Account 1`
+### `Account 1 (Can't be used)`
 API KEY:    v3YvEB7MQAmosLDjPHKa3LWyfEikMU5GVzZqNLF77lFP2hsKuQ <br>
 Secrect:    91BEGtP8Iv5UcmGpEljgKTzYCmNwUAvCwMSyFi1H
 ### `Account 2`
